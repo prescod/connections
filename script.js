@@ -6,6 +6,7 @@ class ConnectionsSolver {
         this.capturedImage = null;
         this.stream = null;
         this.apiClient = new OpenAIClient();
+        this.logMessages = [];
         
         this.initializeElements();
         this.bindEvents();
@@ -13,6 +14,24 @@ class ConnectionsSolver {
         this.loadApiKey();
         this.loadModelPreference();
         this.loadSavedImage();
+
+        // Capture console logs
+        this.captureConsoleLogs();
+    }
+
+    captureConsoleLogs() {
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        console.log = (...args) => {
+            this.logMessages.push({ type: 'log', message: args.join(' ') });
+            originalLog.apply(console, args);
+        };
+
+        console.error = (...args) => {
+            this.logMessages.push({ type: 'error', message: args.join(' ') });
+            originalError.apply(console, args);
+        };
     }
 
     initializeElements() {
@@ -193,7 +212,9 @@ class ConnectionsSolver {
             this.saveApiKey(apiKey);
             
             const selectedModel = this.modelSelect.value;
+            console.log('Attempting to solve game with model:', selectedModel);
             const solution = await this.apiClient.callOpenAIAPI(apiKey, this.capturedImage, selectedModel);
+            console.log('Solution received:', solution);
             this.displaySolution(solution);
             
         } catch (error) {
@@ -389,7 +410,7 @@ class ConnectionsSolver {
     toggleDebugInfo() {
         if (this.debugInfo.style.display === 'none') {
             this.debugInfo.style.display = 'block';
-            this.debugInfo.textContent = JSON.stringify(this.lastDebugData, null, 2);
+            this.debugInfo.textContent = this.logMessages.map(log => `${log.type.toUpperCase()}: ${log.message}`).join('\n');
             this.debugButton.textContent = '🐛 Hide Debug Info';
         } else {
             this.debugInfo.style.display = 'none';
