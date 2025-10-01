@@ -1,0 +1,21 @@
+{
+    "name": "connections-solver",
+    "version": "1.0.0",
+    "description": "A mobile-first web application that uses OpenAI's vision API to solve Connections puzzles",
+    "main": "script.js",
+    "scripts": {
+        "test": "node tests/integration.test.js"
+    },
+    "keywords": [
+        "connections",
+        "puzzle",
+        "openai",
+        "vision",
+        "ai"
+    ],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "node-fetch": "^2.7.0"
+    }
+}

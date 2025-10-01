@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connections Game Solver</title>
+    <meta name="description" content="Solve Connections puzzles using AI and your camera">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Connections Solver">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔗 Connections Solver</h1>
+            <p>Take a photo of the Connections game and let AI solve it for you!</p>
+        </header>
+
+        <main>
+            <div class="camera-section">
+                <div class="camera-container" id="cameraContainer">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                </div>
+                
+                <div class="camera-controls">
+                    <button id="startCamera" class="btn btn-primary">
+                        📷 Start Camera
+                    </button>
+                    <button id="capturePhoto" class="btn btn-secondary" style="display: none;">
+                        📸 Capture Photo
+                    </button>
+                    <button id="retakePhoto" class="btn btn-outline" style="display: none;">
+                        🔄 Retake
+                    </button>
+                </div>
+
+                <div class="file-upload">
+                    <label for="fileInput" class="file-label">
+                        📁 Or choose from gallery
+                    </label>
+                    <input type="file" id="fileInput" accept="image/*" capture="environment">
+                </div>
+            </div>
+
+            <div class="image-preview" id="imagePreview" style="display: none;">
+                <h3>Captured Image</h3>
+                <img id="previewImage" alt="Captured photo">
+            </div>
+
+            <div class="api-section">
+                <div class="api-key-input">
+                    <label for="apiKey">OpenAI API Key:</label>
+                    <input type="password" id="apiKey" placeholder="sk-..." required>
+                    <small>Your API key is stored locally and never sent to our servers</small>
+                </div>
+                
+                <div class="model-selection">
+                    <label for="modelSelect">AI Model:</label>
+                    <select id="modelSelect">
+                        <option value="gpt-4o">GPT-4o (Recommended)</option>
+                        <option value="gpt-4o-mini">GPT-4o Mini (Faster, Cheaper)</option>
+                        <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                    </select>
+                    <small>Different models offer various speed/accuracy tradeoffs. Enter API key to see all available vision-capable models.</small>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="solveGame" class="btn btn-success" disabled>
+                        🧠 Solve Connections Game
+                    </button>
+                    <button id="retryButton" class="btn btn-secondary" style="display: none;">
+                        🔄 Retry with Different Model
+                    </button>
+                </div>
+            </div>
+
+            <div class="loading" id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Analyzing your image and solving the puzzle...</p>
+            </div>
+
+            <div class="results" id="results" style="display: none;">
+                <h3>🎉 Solution Found!</h3>
+                <div id="solutionContent"></div>
+            </div>
+
+            <div class="error" id="error" style="display: none;">
+                <h3>❌ Error</h3>
+                <p id="errorMessage"></p>
+                <button id="debugButton" class="btn btn-outline" style="display: none; margin-top: 15px;">
+                    🐛 Show Debug Info
+                </button>
+                <pre id="debugInfo" style="display: none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px; overflow-x: auto; font-size: 0.85rem; text-align: left;"></pre>
+            </div>
+        </main>
+
+        <footer>
+            <p>Built with ❤️ for Connections puzzle lovers</p>
+        </footer>
+    </div>
+
+    <script src="openai_api.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
