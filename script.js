@@ -68,6 +68,37 @@ class ConnectionsSolver {
         this.solveGameBtn.addEventListener('click', () => this.solveGame());
         this.retryButton.addEventListener('click', () => this.retryWithDifferentModel());
         this.debugButton.addEventListener('click', () => this.toggleDebugInfo());
+
+        // Add paste event listener
+        document.addEventListener('paste', (event) => this.handlePaste(event));
+    }
+
+    handlePaste(event) {
+        const items = event.clipboardData.items;
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                const blob = items[i].getAsFile();
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.capturedImage = e.target.result;
+                    this.previewImage.src = this.capturedImage;
+                    this.imagePreview.style.display = 'block';
+
+                    // Stop camera if running
+                    this.stopCamera();
+                    this.startCameraBtn.style.display = 'inline-flex';
+                    this.capturePhotoBtn.style.display = 'none';
+                    this.retakePhotoBtn.style.display = 'none';
+
+                    // Save image to localStorage
+                    this.saveImageToStorage();
+
+                    this.validateInputs();
+                };
+                reader.readAsDataURL(blob);
+                break;
+            }
+        }
     }
 
     async startCamera() {
