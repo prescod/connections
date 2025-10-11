@@ -25,6 +25,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
+      - name: Inject Commit Hash
+        run: |
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          sed -i "s/<span id=\"commitHash\">[^<]*<\/span>/<span id=\"commitHash\">$COMMIT_HASH<\/span>/" index.html
+      
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
